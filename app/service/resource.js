@@ -1,9 +1,9 @@
 const { Service } = require('egg');
 let BaseService = require('./base');
-class UserService extends BaseService {
+class ResourceService extends BaseService {
 	constructor(...args) {
 		super(...args);
-		this.entity = 'user';
+		this.entity = 'resource';
 	}
 }
-module.exports = UserService;
+module.exports = ResourceService;
