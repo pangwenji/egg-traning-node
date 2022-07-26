@@ -1,33 +1,52 @@
 const Controller = require('egg').Controller;
 const { sign } = require('jsonwebtoken');
+const ApiJsonResult = require('../utils/apijsonresult');
 const BaseController = require('./base');
+// const ApiJsonResult = require('../utils/apijsonresult');
 class UserController extends BaseController {
+	
 	constructor(...args) {
 		super(...args);
 		this.entity = 'user';
+		// apiJsonResult = new ApiJsonResult();
 	}
 	//注册
 	async signup() {
 		let { app, ctx } = this;
 		let body = ctx.request.body;
-		let { repassword, address, agreement, prefix, captcha, ...user } = body;
+		let { repassword, address, agreement, prefix, captcha, user } = body;
+		console.log(agreement, 'agreement')
 		if (user.password !== repassword) {
-			return this.error('密码和确认密码不一致');
+		   return	this.error('密码和确认密码不一致')
 		}
 		if (!agreement) {
 			return this.error('请同意协议后再试');
 		}
-		if (!captcha || !ctx.session.captcha || captcha !== ctx.session.captcha) {
-			return this.error('验证码填写不正确');
-		}
-		address = address.join('-');
-		user.address = address;
-		user.phone = prefix + user.phone;
-		let result = await app.mysql.insert('user', user);
-		if (result.affectedRows > 0) {
-			this.success('注册成功');
-		} else {
-			this.error('注册失败');
+		// if (!captcha || !ctx.session.captcha || captcha !== ctx.session.captcha) {
+		// 	return this.error('验证码填写不正确');
+		// }
+		// address = address.join('-');
+		// user.address = address;
+		// user.phone = prefix + user.phone;
+		//先查询一下表是否已经存在用户名
+		
+		try {
+
+			//先查询一下表是否已经存在用户名
+			let userList = await app.mysql.select('user', { where: { username: user.username } });
+			
+			if (userList.length > 0) { 
+				return new ApiJsonResult().error('用户名已经存在，请换过一个！');
+			}
+
+			let result = await app.mysql.insert('user', user);
+			if (result.affectedRows > 0) {
+				new ApiJsonResult().success('注册成功');
+			} else {
+				new ApiJsonResult().error('注册失败！')
+			}
+		 } catch (e) { 
+			  new ApiJsonResult().error('注册失败！')
 		}
 	}
 	

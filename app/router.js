@@ -9,6 +9,7 @@ module.exports = app => {
 
 	// router.get('/', auth, controller.home.index);
 	router.post('/api/signup', controller.user.signup);
+	router.post('/api/upload', controller.file.upload);
 	// router.post('/api/signin', controller.user.signin);
 
 	// router.resources('user', '/api/user', controller.user);

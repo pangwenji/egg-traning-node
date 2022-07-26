@@ -5,14 +5,22 @@ module.exports = appInfo => {
 	config.keys = appInfo.name + '_1565179334708_8215';
 
 	config.middleware = [];
-
 	//app.mysql.query();
 	const userConfig = {
-		security: {
-			csrf: false,
+	
+		multipart: {
+			mode: 'file',//文件类型
+			fileSize: '4gb',
+			// whilelist:['.apk']
+			fileExtensions:['.apk']
+		},
+		  security: {
+				csrf: {
+					enable:false
+				},
 			domainWhiteList: ['http://127.0.0.1:8000'],
 		},
-
+    
 		cors: {
 			credentials: true
 		},
@@ -33,3 +41,4 @@ module.exports = appInfo => {
 		...userConfig,
 	};
 };
+
