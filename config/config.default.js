@@ -10,7 +10,7 @@ module.exports = appInfo => {
 	
 		multipart: {
 			mode: 'file',//文件类型
-			fileSize: '4gb',
+			fileSize: '500mb',
 			// whilelist:['.apk']
 			fileExtensions:['.apk']
 		},

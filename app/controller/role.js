@@ -7,6 +7,7 @@ class RoleController extends BaseController {
 	async getUser() {
 		const { app, service, ctx } = this;
 		let result = await service.role.getUser();
+		console.log(result,'result')
 		this.success(result);
 	}
 	//设置用户角色的关系，就是把角色和用户进行关联
